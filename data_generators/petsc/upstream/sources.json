@@ -1,0 +1,32 @@
+{
+  "ex9.c": {
+    "source_version": "v3.24.0",
+    "url": "https://raw.githubusercontent.com/petsc/petsc/v3.24.0/src/ts/tutorials/ex9.c",
+    "sha256": "68a6e6515d96e2ab71cb99facaf02f3e5fdfa3c4cb7e15d06e9a91d62d1ecf90",
+    "acquisition": "Copied unchanged from the historical screening source; SHA256 matches its recorded source manifest."
+  },
+  "ex10.c": {
+    "source_version": "v3.24.0",
+    "url": "https://raw.githubusercontent.com/petsc/petsc/v3.24.0/src/ts/tutorials/ex10.c",
+    "sha256": "7d62a34ee5363cf600877c52cd5dfd457676d9ba010761581520f405c2930185",
+    "acquisition": "Copied unchanged from the historical screening source; SHA256 matches its recorded source manifest."
+  },
+  "ex14.c": {
+    "source_version": "v3.24.0",
+    "url": "https://raw.githubusercontent.com/petsc/petsc/v3.24.0/src/ts/tutorials/ex14.c",
+    "sha256": "eccf2aea3ccf1fe48e1fab640cf24fa2eab8d212c6cb890f67856632d9c4b93b",
+    "acquisition": "Copied unchanged from the historical screening source; SHA256 matches its recorded source manifest."
+  },
+  "ex29.c": {
+    "source_version": "v3.24.0",
+    "url": "https://raw.githubusercontent.com/petsc/petsc/v3.24.0/src/ts/tutorials/ex29.c",
+    "sha256": "8b652873beeaad2bd6768d93a19ac0ebf171b40e215511c17acec40ece55e16e",
+    "acquisition": "Copied unchanged from the historical screening source; SHA256 matches its recorded source manifest."
+  },
+  "LICENSE": {
+    "source_version": "v3.24.0",
+    "url": "https://raw.githubusercontent.com/petsc/petsc/v3.24.0/LICENSE",
+    "sha256": "a9e4dff457267559a9013778b08a65c3922e1f8e983d13e308ef249869661d64",
+    "acquisition": "Official tagged PETSc LICENSE retrieved through the web reader on 2026-11-10."
+  }
+}

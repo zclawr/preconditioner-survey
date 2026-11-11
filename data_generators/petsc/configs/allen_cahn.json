@@ -1,0 +1,50 @@
+{
+  "name": "allen_cahn",
+  "source": "ex29.c",
+  "description": "Two-dimensional varying-coefficient Allen-Cahn equation; backward Euler with a colored finite-difference Jacobian.",
+  "source_version": "v3.24.0",
+  "options": [
+    "-ts_type",
+    "beuler",
+    "-ts_max_steps",
+    "6",
+    "-ts_adapt_type",
+    "none",
+    "-snes_type",
+    "newtonls",
+    "-snes_rtol",
+    "1e-9",
+    "-snes_atol",
+    "1e-12",
+    "-snes_max_it",
+    "30",
+    "-ksp_type",
+    "preonly",
+    "-pc_type",
+    "lu",
+    "-draw_type",
+    "null",
+    "-da_grid_x",
+    "49",
+    "-da_grid_y",
+    "49",
+    "-ts_dt",
+    "0.5",
+    "-snes_fd_color",
+    "-ts_max_time",
+    "100",
+    "-ts_exact_final_time",
+    "stepover",
+    "-ts_max_reject",
+    "0"
+  ],
+  "export_steps": [
+    0,
+    2,
+    5
+  ],
+  "notes": [
+    "The default grid has 49-by-49 scalar unknowns (2401 total).",
+    "The tutorial sets a spatially varying coefficient internally; JSON can change runtime options but not hardcoded model definitions."
+  ]
+}

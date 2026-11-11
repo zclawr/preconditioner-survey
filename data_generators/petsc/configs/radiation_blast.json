@@ -1,0 +1,53 @@
+{
+  "name": "radiation_blast",
+  "source": "ex10.c",
+  "description": "One-dimensional nonequilibrium radiation diffusion with blast initial state; backward Euler and analytic FD-discretization Jacobian.",
+  "source_version": "v3.24.0",
+  "options": [
+    "-ts_type",
+    "beuler",
+    "-ts_adapt_type",
+    "none",
+    "-ts_max_steps",
+    "6",
+    "-ts_max_time",
+    "100",
+    "-ts_exact_final_time",
+    "stepover",
+    "-ts_max_reject",
+    "0",
+    "-snes_max_it",
+    "60",
+    "-snes_rtol",
+    "1e-10",
+    "-snes_atol",
+    "1e-12",
+    "-ksp_type",
+    "preonly",
+    "-pc_type",
+    "lu",
+    "-ts_converged_reason",
+    "-options_left",
+    "-draw_type",
+    "null",
+    "-da_grid_x",
+    "512",
+    "-rd_initial",
+    "2",
+    "-rd_jacobian",
+    "analytic",
+    "-rd_discretization",
+    "fd",
+    "-ts_dt",
+    "0.001"
+  ],
+  "export_steps": [
+    0,
+    2,
+    5
+  ],
+  "notes": [
+    "The grid has two unknowns per point, so da_grid_x=512 produces a 1024-by-1024 matrix.",
+    "rd_initial=2 selects the blast initial state; rd_initial=1 selects the distinct Marshak-wave problem."
+  ]
+}
