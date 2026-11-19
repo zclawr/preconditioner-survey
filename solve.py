@@ -1,11 +1,9 @@
 import sys
 import petsc4py
-import operators.poisson
 import argparse
 
-petsc4py.init(sys.argv)
-
-from petsc4py import PETSc
+import operators.poisson
+from petsc4py import PETSc 
 
 # Relevant commands
 # -------------
@@ -39,30 +37,45 @@ def init():
 
     return A,n,h
 
-def linear_solve(A):
+def linear_solve(A, b, solver="gmres", pc="gamg", rtol=1e-8, max_it=1000, gmres_restart=20):
     A.viewFromOptions('-view_mat')
-    # PETSc represents all linear solvers as preconditioned Krylov subspace methods
-    # of type `PETSc.KSP`. Here we create a KSP object for a conjugate gradient
-    # solver preconditioned with an algebraic multigrid method.
+
     ksp = PETSc.KSP()
     ksp.create(comm=A.getComm())
-    ksp.setType(PETSc.KSP.Type.GMRES)
-    ksp.getPC().setType(PETSc.PC.Type.GAMG)
-
-    # We set the matrix in our linear solver and allow the user to program the
-    # solver with options.
+    ksp.setType(solver)
+    ksp.getPC().setType(pc)
     ksp.setOperators(A)
+    ksp.setTolerances(rtol=rtol, max_it=max_it)
+    if "gmres" in solver:
+        ksp.setGMRESRestart(gmres_restart)
+    #TODO: Verify whether this is the correct norm type, this was a little confusing in the docs
+    ksp.setNormType(PETSc.KSP.NormType.NORM_UNPRECONDITIONED)
+    ksp.setInitialGuessNonzero(False)
+    # Allow user to force options from cmd line
     ksp.setFromOptions()
 
-    # Since the matrix knows its size and parallel distribution, we can retrieve
-    # appropriately-scaled vectors using `Mat.createVecs`. PETSc vectors are
-    # objects of type `PETSc.Vec`. Here we set the right-hand side of our system to
-    # a vector of ones, and then solve.
-    x, b = A.createVecs()
-    b.set(1.0)
+    x = A.createVecs()[0]
+    ksp.setUp()
+    history = []
+
+    def monitor(ksp, it, rnorm): # check docs for monitor specs if you'd like to edit this
+        history.append((it, rnorm))
+
+    ksp.setMonitor(monitor)
+
     ksp.solve(b, x)
 
+    result = {
+        "it": ksp.getIterationNumber(),
+        "converged": ksp.getConvergedReason() > 0,
+        "history": history
+    }
+
     x.viewFromOptions('-view_sol')
+    # Clean up for memory management
+    x.destroy()
+    ksp.destroy()
+    return result
 
 operator_map = {
     "poisson": operators.poisson.construct_poisson_operator    
@@ -70,12 +83,19 @@ operator_map = {
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Configure preconditioner survey settings")
-    parser.add_argument("operator", help=r"Available operators: {poisson}")
+    parser.add_argument("operator", default='poisson', help="Available operators: {poisson}")
+    parser.add_argument("-n", "--n", default=32, help="Operator width n (where A is n x n)")
+    parser.add_argument("-s", "--solver", default='gmres', help="Available solvers: {GMRES, LGMRES, RGMRES, CG}") #TODO: verify available solver types in PETSc
+    parser.add_argument("-p", "--pc", default='gamg', help="Available preconditioners: {ilu, icc, gamg, hypre}") #TODO: verify available preconditioners in PETSc
+    parser.add_argument("-t", "--rtol", default=1e-8, help="Residual tolerance")
+    parser.add_argument("-i", "--max_it", default=1000, help="Maximum solver iterations")
+    parser.add_argument("-r", "--gmres_testart", default=20, help="GMRES restart iterations")
 
     args, petsc_args = parser.parse_known_args()
+    petsc4py.init([sys.argv[0]] + petsc_args)
+
     op_name = args.operator
     op = operator_map[op_name]
+    A, b = op(args.n)
+    result = linear_solve(A, b, args.solver, args.pc, args.rtol, args.max_it, args.gmres_restart)
 
-    A,n,h = init()
-    A = op(A,n,h)
-    linear_solve(A)
