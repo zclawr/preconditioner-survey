@@ -5,6 +5,7 @@ import os
 import sys
 
 import petsc4py
+from petsc4py import PETSc 
 
 from solve import linear_solve, operator_map
 
@@ -39,8 +40,10 @@ if __name__ == '__main__':
     args, petsc_args = parser.parse_known_args(sys.argv[1:])
     petsc4py.init([sys.argv[0]] + petsc_args)
 
-    from petsc4py import PETSc # must follow init, which requires arg parsing first
-
     results = run_survey(args)
+
+    # TODO: visualize results object, for example:
+    # - Line plot residuals over time per preconditioner
+    # - Line plot iteration over values of n per preconditioner
 
    
