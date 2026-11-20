@@ -18,7 +18,8 @@ As a preliminary exploration, we will varying the variables discussed above for 
 
 ### Heat Equation
 
-- Stencils: 5-point, 9-point cross, 9-point box; vary width, time, 
+- Spatial stencils: 5-point, 9-point cross, 9-point box; vary width
+- Time: Backward Euler
 - RHS (f): TBD
 - Anisotropy parameter
 
